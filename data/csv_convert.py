@@ -18,5 +18,5 @@ def convert(csv_file, json_file, model):
 
 
 if __name__ == '__main__':
-    convert('ads.csv', 'ads.json', 'ad')
-    convert('categories.csv', 'categories.json', 'category')
+    convert('ads.csv', 'ads.json', 'ads.ad')
+    convert('categories.csv', 'categories.json', 'ads.category')
