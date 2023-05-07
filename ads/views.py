@@ -72,3 +72,4 @@ class AdDetailView(DetailView):
                              "address": ad.address,
                              "is_published": ad.is_published
                              })
+
