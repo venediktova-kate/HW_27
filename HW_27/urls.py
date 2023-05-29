@@ -25,7 +25,9 @@ urlpatterns = [
     path('', main),
     path('cat/', include("ads.urls.cat")),
     path('ad/', include("ads.urls.ad")),
-    path('user/', include("users.urls")),
+    path('user/', include("users.urls.user")),
+    path('location/', include("users.urls.location")),
+
     path('admin/', admin.site.urls),
 ]
 
