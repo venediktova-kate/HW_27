@@ -4,6 +4,7 @@ from rest_framework.relations import SlugRelatedField
 
 from ads.models import Ad, Category
 from users. models import User
+from users.serializers import LocationSerializer
 
 
 class AdSerializer(ModelSerializer):
@@ -23,6 +24,7 @@ class AdListSerializer(ModelSerializer):
 
 class AdAuthorSerializer(ModelSerializer):
     total_ads = SerializerMethodField()
+    locations = LocationSerializer(many=True)
 
     def get_global_ads(self, obj):
         return obj.ad_set.count()
