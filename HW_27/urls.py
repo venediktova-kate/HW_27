@@ -25,6 +25,7 @@ urlpatterns = [
     path('', main),
     path('cat/', include("ads.urls.cat")),
     path('ad/', include("ads.urls.ad")),
+    path('selection/', include("ads.urls.selection")),
     path('user/', include("users.urls.user")),
     path('location/', include("users.urls.location")),
 

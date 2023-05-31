@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import TextChoices
+from django.contrib.auth.models import AbstractUser
 
 
 class Location(models.Model):
@@ -21,15 +22,14 @@ class UserRoles(TextChoices):
     ADMIN = "admin", "Администратор"
 
 
-# id,first_name,last_name,username,password,role,age,location_id
-class User(models.Model):
-    first_name = models.CharField(max_length=200)
-    last_name = models.CharField(max_length=200)
-    username = models.CharField(max_length=200)
-    password = models.CharField(max_length=200)
+class User(AbstractUser):
     role = models.CharField(max_length=10, choices=UserRoles.choices, default=UserRoles.MEMBER)
     age = models.PositiveSmallIntegerField()
     locations = models.ManyToManyField(Location)
+
+    def save(self, *args, **kwargs):
+        self.set_password(raw_password=self.password)
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Пользователь"

@@ -2,7 +2,7 @@ from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ModelSerializer
 from rest_framework.relations import SlugRelatedField
 
-from ads.models import Ad, Category
+from ads.models import Ad, Category, Selection
 from users. models import User
 from users.serializers import LocationSerializer
 
@@ -41,3 +41,37 @@ class AdDetailSerializer(ModelSerializer):
     class Meta:
         fields = "__all__"
         model = Ad
+
+
+class SelectionSerializer(ModelSerializer):
+    class Meta:
+        fields = "__all__"
+        model = Selection
+
+
+class SelectionListSerializer(ModelSerializer):
+    class Meta:
+        fields = ["id", "name"]
+        model = Selection
+
+
+class SelectionCreateSerializer(ModelSerializer):
+    owner = SlugRelatedField(slug_field="Username", required=False, read_only=True)
+
+    def create(self, validated_data):
+        request = self.context.get("request")
+        validated_data["owner"] = request.user
+        return super().create(validated_data)
+
+    class Meta:
+        fields = "__all__"
+        model = Selection
+
+
+class SelectionDetailSerializer(ModelSerializer):
+    items = AdSerializer(many=True)
+    owner = SlugRelatedField(slug_field="Username", queryset=User.objects.all())
+
+    class Meta:
+        fields = "__all__"
+        model = Selection
