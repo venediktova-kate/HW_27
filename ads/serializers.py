@@ -1,13 +1,22 @@
-from rest_framework.fields import SerializerMethodField
+from rest_framework.fields import SerializerMethodField, BooleanField, IntegerField
 from rest_framework.serializers import ModelSerializer
 from rest_framework.relations import SlugRelatedField
 
 from ads.models import Ad, Category, Selection
-from users. models import User
+from users.models import User
 from users.serializers import LocationSerializer
 
 
 class AdSerializer(ModelSerializer):
+    class Meta:
+        fields = "__all__"
+        model = Ad
+
+
+class AdCreateSerializer(ModelSerializer):
+    is_published = BooleanField(validators=[check_not_true], required=False)
+    age = IntegerField(read_only=True)
+
     class Meta:
         fields = "__all__"
         model = Ad

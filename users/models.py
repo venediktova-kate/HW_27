@@ -1,6 +1,10 @@
+import datetime
+
 from django.db import models
 from django.db.models import TextChoices
 from django.contrib.auth.models import AbstractUser
+
+from users.validators import check_birth, check_domains
 
 
 class Location(models.Model):
@@ -24,11 +28,17 @@ class UserRoles(TextChoices):
 
 class User(AbstractUser):
     role = models.CharField(max_length=10, choices=UserRoles.choices, default=UserRoles.MEMBER)
-    age = models.PositiveSmallIntegerField()
+    age = models.PositiveSmallIntegerField(null=True)
     locations = models.ManyToManyField(Location)
+    birth_date = models.DateField(null=True, validators=[check_birth])
+    email = models.EmailField(validators=[check_domains], unique=True)
 
     def save(self, *args, **kwargs):
         self.set_password(raw_password=self.password)
+        today = datetime.date.today()
+        if self.birth_date:
+            self.age = (today.year - self.birth_date.year - 1) + (
+                    (today.month, today.day) >= (self.birth_date.month, self.birth_date.day))
         super().save(*args, **kwargs)
 
     class Meta:
